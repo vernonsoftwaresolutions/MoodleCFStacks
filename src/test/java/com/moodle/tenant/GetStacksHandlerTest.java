@@ -56,7 +56,7 @@ public class GetStacksHandlerTest {
         given(proxyRequest.getQueryParam("tagKey")).willReturn(Optional.of("TYPE"));
         given(proxyRequest.getQueryParam("tagValue")).willReturn(Optional.of("TENANT"));
 
-        given(factory.createResponse(anyObject(), eq(HttpStatus.SC_ACCEPTED), eq(null))).willReturn(proxyResponse);
+        given(factory.createResponse(anyObject(), eq(HttpStatus.SC_OK), eq(null))).willReturn(proxyResponse);
 
         ProxyResponse response = handler.handleRequest(proxyRequest,context );
 

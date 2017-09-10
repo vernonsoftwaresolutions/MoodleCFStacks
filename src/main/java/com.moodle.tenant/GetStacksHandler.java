@@ -47,7 +47,7 @@ public class GetStacksHandler implements RequestHandler<ProxyRequest, ProxyRespo
             stack.setTagKey(tagKey.get());
             stack.setTagValue(tagValue.get());
 
-            ProxyResponse proxyResponse = factory.createResponse(stack, HttpStatus.SC_ACCEPTED, null);
+            ProxyResponse proxyResponse = factory.createResponse(stack, HttpStatus.SC_OK, null);
 
             log.info("About to return proxy response  " + proxyResponse);
 
