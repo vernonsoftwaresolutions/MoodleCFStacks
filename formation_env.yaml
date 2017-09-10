@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Moode Tenant Api Environment Assets
+
+Parameters:
+  ApiGateway:
+    Description: Ref of API Gateway
+    Type: String
+  StageName:
+    Description: Deployment stage for API Gateway
+    Type: String
+  DeploymentId:
+    Description: Current Deployment Id
+    Type: String
+  Version:
+    Description: Deployment version number
+    Type: String
+  DomainName:
+    Type: String
+
+Resources:
+
+  ApiGatewayStage:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      StageName: !Ref StageName
+      RestApiId: !Ref ApiGateway
+      DeploymentId: !Ref DeploymentId
+      Variables:
+        env: !Ref StageName
+      #note-this requires api gateway to have appropriate role
+      MethodSettings:
+        - DataTraceEnabled: true
+          HttpMethod: "*"
+          LoggingLevel: INFO
+          ResourcePath: "/*"
+          MetricsEnabled: true
+
+  UrlMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    DependsOn:
+      - ApiGatewayStage
+    Properties:
+      BasePath: !Ref StageName
+      DomainName: !Ref DomainName
+      RestApiId: !Ref ApiGateway
+      Stage: !Ref StageName
+
+  # Moodle Tenant alias
+  LambdaFunctionAlias:
+    Type: AWS::Lambda::Alias
+    Properties:
+      FunctionName: !ImportValue MoodleTenantPostHandlerArn
+      FunctionVersion: !Ref Version
+      Name: !Ref StageName
+
+  ## Invoke Permissions
+  LambdaFunctionInvokePermission:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - LambdaFunctionAlias
+    Properties:
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      FunctionName: !Join [":", [ !ImportValue MoodleTenantPostHandlerArn, !Ref StageName]]
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/${StageName}/*

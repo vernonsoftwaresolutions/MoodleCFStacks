@@ -1,0 +1,27 @@
+machine:
+  python:
+    version: 2.7.11
+
+dependencies:
+  override:
+     - chmod +x gradlew
+  pre:
+    - pip install awscli
+    - aws configure set default.region us-east-1
+    - npm install newman --global
+
+
+test:
+  override:
+    - ./gradlew clean buildZip
+    - aws cloudformation validate-template --template-body file://formation_assets.yaml
+    - aws cloudformation validate-template --template-body file://formation_env.yaml
+
+deployment:
+  development:
+    branch: master
+    commands:
+    ## create deployment
+    - sh ./deploy.sh lambda.bucket.moodle $CIRCLE_BUILD_NUM dev cfstack.vssdevelopment.com vssdevelopment.com.
+    - newman run integration/MoodleTenant.postman_collection.json
+
