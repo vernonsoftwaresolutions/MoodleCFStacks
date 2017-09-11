@@ -1,0 +1,59 @@
+{
+	"id": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
+	"name": "MoodleStacks",
+	"description": "",
+	"order": [
+		"a6850eda-7555-a114-9281-01908d533d7d"
+	],
+	"folders": [],
+	"folders_order": [],
+	"timestamp": 1505063890302,
+	"owner": "837563",
+	"public": false,
+	"requests": [
+		{
+			"id": "a6850eda-7555-a114-9281-01908d533d7d",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "https://cfstack.vssdevelopment.com/dev/moodle/stacks?tagKey=TYPE&tagValue=TENANT",
+			"queryParams": [
+				{
+					"key": "tagKey",
+					"value": "TYPE",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "tagValue",
+					"value": "TENANT",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"preRequestScript": "var randomClient = Math.random().toString(36).slice(2)\n\nvar randomPriority = Math.floor(Math.random() * 100) + 1  \n\npostman.setGlobalVariable(\"randomClient\",randomClient);\npostman.setGlobalVariable(\"randomPriority\",randomPriority);\n",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Stacks exist\"] = jsonData.length > 0\ntests[\"stackId exists\"] = jsonData[0].stackId !== null && jsonData[0].stackId !== undefined\ntests[\"stackName exists\"] = jsonData[0].stackName !== null && jsonData[0].stackName !== undefined\n",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1505096253471,
+			"name": "Get Stacks",
+			"description": "initial test",
+			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
+			"responses": [],
+			"rawModeData": "{\n\t\"stackName\": \"moodle-ecs-single\",\n\t\"clientName\": \"{{randomClient}}\",\n\t\"vpcId\": \"vpc-c7aa77be\",\n\t\"hostedZoneName\": \"vssdevelopment.com\",\n\t\"priority\": \"{{randomPriority}}\"\n}"
+		}
+	]
+}
