@@ -11,19 +11,6 @@ HOSTEDZONENAME=$5
 API_NAME="GetCFStack"
 
 ##
-# Package record set
-##
-#aws cloudformation package --template-file \
-#    formation_recordset.yaml --output-template-file \
-#    formation_recordset_output.yaml --s3-bucket $S3_BUCKET
-
-##
-# Deploy record set
-##
-#aws cloudformation deploy --template-file \
-#    formation_recordset_output.yaml --capabilities CAPABILITY_IAM \
-#    --stack-name apidnsname --parameter-overrides HostedZoneName="${DNSNAME}" RecordSet="${RecordSet}"
-##
 # Package API Gateway Assets
 ##
 aws cloudformation package --template-file \

@@ -3,6 +3,8 @@
 	"name": "MoodleStacks",
 	"description": "",
 	"order": [
+		"b2f4602f-85a0-e879-7221-094a7962f7e1",
+		"75d340d1-c94b-9933-8eed-b76af8fadf3b",
 		"a6850eda-7555-a114-9281-01908d533d7d"
 	],
 	"folders": [],
@@ -11,6 +13,50 @@
 	"owner": "837563",
 	"public": false,
 	"requests": [
+		{
+			"id": "75d340d1-c94b-9933-8eed-b76af8fadf3b",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "https://cfstack.vssdevelopment.com/dev/moodle/stacks?tagKey=TYPE&tagValue=TENANT",
+			"queryParams": [
+				{
+					"key": "tagKey",
+					"value": "TYPE",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "tagValue",
+					"value": "TENANT",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"preRequestScript": "var randomClient = Math.random().toString(36).slice(2)\n\nvar randomPriority = Math.floor(Math.random() * 100) + 1  \n\npostman.setGlobalVariable(\"randomClient\",randomClient);\npostman.setGlobalVariable(\"randomPriority\",randomPriority);\n",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1505098490672,
+			"name": "cold start copy",
+			"description": "initial test",
+			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
+			"responses": [],
+			"rawModeData": "{\n\t\"stackName\": \"moodle-ecs-single\",\n\t\"clientName\": \"{{randomClient}}\",\n\t\"vpcId\": \"vpc-c7aa77be\",\n\t\"hostedZoneName\": \"vssdevelopment.com\",\n\t\"priority\": \"{{randomPriority}}\"\n}"
+		},
 		{
 			"id": "a6850eda-7555-a114-9281-01908d533d7d",
 			"headers": "Content-Type: application/json\n",
@@ -50,6 +96,50 @@
 			"helperAttributes": {},
 			"time": 1505096253471,
 			"name": "Get Stacks",
+			"description": "initial test",
+			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
+			"responses": [],
+			"rawModeData": "{\n\t\"stackName\": \"moodle-ecs-single\",\n\t\"clientName\": \"{{randomClient}}\",\n\t\"vpcId\": \"vpc-c7aa77be\",\n\t\"hostedZoneName\": \"vssdevelopment.com\",\n\t\"priority\": \"{{randomPriority}}\"\n}"
+		},
+		{
+			"id": "b2f4602f-85a0-e879-7221-094a7962f7e1",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "https://cfstack.vssdevelopment.com/dev/moodle/stacks?tagKey=TYPE&tagValue=TENANT",
+			"queryParams": [
+				{
+					"key": "tagKey",
+					"value": "TYPE",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "tagValue",
+					"value": "TENANT",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"preRequestScript": "var randomClient = Math.random().toString(36).slice(2)\n\nvar randomPriority = Math.floor(Math.random() * 100) + 1  \n\npostman.setGlobalVariable(\"randomClient\",randomClient);\npostman.setGlobalVariable(\"randomPriority\",randomPriority);\n",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1505098490672,
+			"name": "cold start",
 			"description": "initial test",
 			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
 			"responses": [],
