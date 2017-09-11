@@ -52,9 +52,9 @@ Resources:
           title: !Ref AWS::StackName
         paths:
           "/moodle/stacks":
-            post:
+            get:
               x-amazon-apigateway-integration:
-                httpMethod: GET
+                httpMethod: POST
                 type: aws_proxy
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetHandler.Arn}:${!stageVariables.env}/invocations
               responses: {}
