@@ -7,11 +7,11 @@ Parameters:
   DNSName:
     Type: String
     Description: Name of Moodle API route 53 entry to use for target
-    Default: api.vssdevelopment.com
+
   HostedZoneName:
     Type: String
     Description: Name of existing route 53 hosted zone name
-    Default: vssdevelopment.com
+
 
 Resources:
 
