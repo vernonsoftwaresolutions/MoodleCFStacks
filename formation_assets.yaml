@@ -87,7 +87,7 @@ Resources:
   GetHandler:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: com.moodle.tenant.PostMoodleTenantHandler
+      Handler: com.moodle.tenant.GetStacksHandler
       FunctionName: GetHandler
       MemorySize: 512
       Runtime: java8
