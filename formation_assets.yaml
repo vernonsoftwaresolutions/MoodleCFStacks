@@ -92,6 +92,7 @@ Resources:
       MemorySize: 512
       Runtime: java8
       CodeUri: build/distributions/MoodleTenantlambda.zip
+      Timeout: 15
       Environment:
         Variables:
           DUMMY: Value
