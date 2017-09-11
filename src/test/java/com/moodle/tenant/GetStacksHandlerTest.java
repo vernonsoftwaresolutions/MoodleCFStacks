@@ -1,8 +1,11 @@
 package com.moodle.tenant;
 
+import com.amazonaws.services.cloudformation.model.Stack;
+import com.amazonaws.services.cloudformation.model.Tag;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moodle.tenant.cloudformation.CloudformationClient;
 import com.moodle.tenant.factory.ProxyResponseFactory;
 import com.moodle.tenant.lambda.ProxyRequest;
 import com.moodle.tenant.lambda.ProxyResponse;
@@ -13,7 +16,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -32,22 +36,28 @@ public class GetStacksHandlerTest {
     private ProxyRequest proxyRequest;
     @Mock
     private Context context;
-    private GetStacksHandler handler;
+    @Mock
+    private CloudformationClient client;
 
+    private GetStacksHandler handler;
+    private Tag tag;
     private ProxyResponse proxyResponse;
     private ObjectMapper objectMapper = new ObjectMapper();
-    private CFStack stack;
+    private List<Stack> stacks;
     @Before
     public void setup() throws JsonProcessingException {
         MockitoAnnotations.initMocks(this);
-        stack = new CFStack();
-        stack.setTagKey("tagKey");
-        stack.setTagValue("tagValue");
+        tag = new Tag()
+                .withKey("tagKey")
+                .withValue("tagValue");
 
-        handler = new GetStacksHandler(factory);
+        handler = new GetStacksHandler(factory, client);
 
         proxyResponse = new ProxyResponse();
-        proxyResponse.setBody(objectMapper.writeValueAsString(stack));
+        stacks = new ArrayList<Stack>(){{
+           add(new Stack().withTags(tag));
+        }};
+        proxyResponse.setBody(objectMapper.writeValueAsString(stacks));
 
     }
     @Test
@@ -57,7 +67,33 @@ public class GetStacksHandlerTest {
         given(proxyRequest.getQueryParam("tagValue")).willReturn(Optional.of("TENANT"));
 
         given(factory.createResponse(anyObject(), eq(HttpStatus.SC_OK), eq(null))).willReturn(proxyResponse);
+        given(client.getStacks(tag)).willReturn(stacks);
+        ProxyResponse response = handler.handleRequest(proxyRequest,context );
 
+        assertThat(response, is(proxyResponse));
+
+    }
+    @Test
+    public void handleRequestClientReturnsEmptyList() throws Exception {
+
+        given(proxyRequest.getQueryParam("tagKey")).willReturn(Optional.of("TYPE"));
+        given(proxyRequest.getQueryParam("tagValue")).willReturn(Optional.of("TENANT"));
+
+        given(factory.createResponse(anyObject(), eq(HttpStatus.SC_OK), eq(null))).willReturn(proxyResponse);
+        given(client.getStacks(tag)).willReturn(new ArrayList<>());
+        ProxyResponse response = handler.handleRequest(proxyRequest,context );
+
+        assertThat(response, is(proxyResponse));
+
+    }
+    @Test
+    public void handleRequestClientReturnsNull() throws Exception {
+
+        given(proxyRequest.getQueryParam("tagKey")).willReturn(Optional.of("TYPE"));
+        given(proxyRequest.getQueryParam("tagValue")).willReturn(Optional.of("TENANT"));
+
+        given(factory.createResponse(anyObject(), eq(HttpStatus.SC_OK), eq(null))).willReturn(proxyResponse);
+        given(client.getStacks(tag)).willReturn(null);
         ProxyResponse response = handler.handleRequest(proxyRequest,context );
 
         assertThat(response, is(proxyResponse));

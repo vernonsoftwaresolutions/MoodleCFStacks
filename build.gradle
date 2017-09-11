@@ -30,7 +30,7 @@ dependencies {
     compile('log4j:log4j:1.2.17')
     compile('com.amazonaws:aws-lambda-java-log4j:1.0.0')
     compile group: 'com.amazonaws', name: 'aws-java-sdk-lambda', version: '1.11.105'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-sqs', version: '1.11.192'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-cloudformation', version: '1.11.182'
 
     testCompile('org.mockito:mockito-core:1.8.4')
     testCompile('junit:junit:4.11')

@@ -1,15 +1,20 @@
 package com.moodle.tenant;
 
+import com.amazonaws.services.cloudformation.AmazonCloudFormationClientBuilder;
+import com.amazonaws.services.cloudformation.model.Stack;
+import com.amazonaws.services.cloudformation.model.Tag;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moodle.tenant.cloudformation.CloudformationClient;
+import com.moodle.tenant.cloudformation.CloudformationClientImpl;
 import com.moodle.tenant.factory.ProxyResponseFactory;
 import com.moodle.tenant.lambda.ProxyRequest;
 import com.moodle.tenant.lambda.ProxyResponse;
-import com.moodle.tenant.model.CFStack;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,6 +24,7 @@ public class GetStacksHandler implements RequestHandler<ProxyRequest, ProxyRespo
     private final Logger log = Logger.getLogger(this.getClass().getName());
 
     private ProxyResponseFactory factory;
+    private CloudformationClient client;
 
     private final String TAG_KEY_PARAM = "tagKey";
     private final String TAG_VALUE_PARAM = "tagValue";
@@ -26,11 +32,13 @@ public class GetStacksHandler implements RequestHandler<ProxyRequest, ProxyRespo
 
     public GetStacksHandler() {
         ObjectMapper mapper = new ObjectMapper();
+        client = new CloudformationClientImpl(AmazonCloudFormationClientBuilder.defaultClient());
         this.factory = new ProxyResponseFactory(mapper);
     }
 
-    public GetStacksHandler(ProxyResponseFactory factory) {
+    public GetStacksHandler(ProxyResponseFactory factory, CloudformationClient client) {
         this.factory = factory;
+        this.client = client;
     }
 
     @Override
@@ -43,11 +51,15 @@ public class GetStacksHandler implements RequestHandler<ProxyRequest, ProxyRespo
         if(tagKey.isPresent() && tagValue.isPresent()) {
             log.info("Received tag " + tagKey);
 
-            CFStack stack = new CFStack();
-            stack.setTagKey(tagKey.get());
-            stack.setTagValue(tagValue.get());
+            Tag tag = new Tag()
+                    .withKey(tagKey.get())
+                    .withValue(tagValue.get());
 
-            ProxyResponse proxyResponse = factory.createResponse(stack, HttpStatus.SC_OK, null);
+            log.info("Created new Amazon tag " + tag);
+
+            List<Stack> stacks = client.getStacks(tag);
+
+            ProxyResponse proxyResponse = factory.createResponse(stacks, HttpStatus.SC_OK, null);
 
             log.info("About to return proxy response  " + proxyResponse);
 
