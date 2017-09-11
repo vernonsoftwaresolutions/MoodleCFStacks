@@ -66,6 +66,7 @@ public class GetStacksHandler implements RequestHandler<ProxyRequest, ProxyRespo
             return proxyResponse;
         }
         else {
+            log.info("Received bad request");
             return factory.createErrorResponse(400, 400, "Bad request", null);
         }
     }
