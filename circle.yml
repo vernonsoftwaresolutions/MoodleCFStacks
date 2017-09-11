@@ -23,5 +23,5 @@ deployment:
     commands:
     ## create deployment
     - sh ./deploy.sh lambda.bucket.moodle $CIRCLE_BUILD_NUM dev cfstack.vssdevelopment.com vssdevelopment.com.
-    - newman run integration/MoodleTenant.postman_collection.json
+    - sh ./run_postman_tests.sh
 
