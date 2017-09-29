@@ -14,7 +14,9 @@ import com.moodle.tenant.lambda.ProxyResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -59,7 +61,7 @@ public class GetStacksHandler implements RequestHandler<ProxyRequest, ProxyRespo
 
             List<Stack> stacks = client.getStacks(tag);
 
-            ProxyResponse proxyResponse = factory.createResponse(stacks, HttpStatus.SC_OK, null);
+            ProxyResponse proxyResponse = factory.createResponse(stacks, HttpStatus.SC_OK, getCorsHeaders());
 
             log.info("About to return proxy response  " + proxyResponse);
 
@@ -67,8 +69,16 @@ public class GetStacksHandler implements RequestHandler<ProxyRequest, ProxyRespo
         }
         else {
             log.info("Received bad request");
-            return factory.createErrorResponse(400, 400, "Bad request", null);
+            return factory.createErrorResponse(400, 400, "Bad request", getCorsHeaders());
         }
     }
+
+    private Map<String, String> getCorsHeaders(){
+        Map headers = new HashMap<String, String>();
+        headers.put( "Access-Control-Allow-Origin", "*");
+        return headers;
+    }
+
+
 
 }
