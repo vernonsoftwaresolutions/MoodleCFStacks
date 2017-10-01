@@ -73,6 +73,10 @@ public class GetStacksHandler implements RequestHandler<ProxyRequest, ProxyRespo
         }
     }
 
+    /**
+     * Helper method to create cors headers for Browsers
+     * @return
+     */
     private Map<String, String> getCorsHeaders(){
         Map headers = new HashMap<String, String>();
         headers.put( "Access-Control-Allow-Origin", "*");
