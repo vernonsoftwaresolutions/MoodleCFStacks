@@ -65,7 +65,7 @@ public class GetStacksHandler implements RequestHandler<ProxyRequest, ProxyRespo
 
             List<CFStack> response = stacks.stream().map(stack -> {
                 //todo- factor this out to separate class
-                String url = stack.getParameters().get(0).getParameterValue() + stack.getParameters().get(1).getParameterValue();
+                String url = stack.getParameters().get(0).getParameterValue() + "." + stack.getParameters().get(1).getParameterValue();
                 return new CFStack(stack.getStackName(), url, stack.getStackStatus(), stack.getCreationTime().getTime());
             }).collect(Collectors.toList());
 
