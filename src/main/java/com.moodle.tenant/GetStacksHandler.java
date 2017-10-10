@@ -11,6 +11,7 @@ import com.moodle.tenant.cloudformation.CloudformationClientImpl;
 import com.moodle.tenant.factory.ProxyResponseFactory;
 import com.moodle.tenant.lambda.ProxyRequest;
 import com.moodle.tenant.lambda.ProxyResponse;
+import com.moodle.tenant.model.CFStack;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by andrewlarsen on 8/24/17.
@@ -61,7 +63,13 @@ public class GetStacksHandler implements RequestHandler<ProxyRequest, ProxyRespo
 
             List<Stack> stacks = client.getStacks(tag);
 
-            ProxyResponse proxyResponse = factory.createResponse(stacks, HttpStatus.SC_OK, getCorsHeaders());
+            List<CFStack> response = stacks.stream().map(stack -> {
+                //todo- factor this out to separate class
+                String url = stack.getParameters().get(0).getParameterValue() + stack.getParameters().get(1).getParameterValue();
+                return new CFStack(stack.getStackName(), url, stack.getStackStatus(), stack.getCreationTime().getTime());
+            }).collect(Collectors.toList());
+
+            ProxyResponse proxyResponse = factory.createResponse(response, HttpStatus.SC_OK, getCorsHeaders());
 
             log.info("About to return proxy response  " + proxyResponse);
 

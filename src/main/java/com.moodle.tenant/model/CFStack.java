@@ -5,22 +5,50 @@ package com.moodle.tenant.model;
  */
 public class CFStack {
 
-    private String tagKey;
-    private String tagValue;
+    private String stackName;
+    private String url;
+    private String status;
+    private Long creationTime;
 
-    public String getTagKey() {
-        return tagKey;
+    public CFStack() {
     }
 
-    public void setTagKey(String tagKey) {
-        this.tagKey = tagKey;
+    public CFStack(String stackName, String url, String status, Long creationTime) {
+        this.stackName = stackName;
+        this.url = url;
+        this.status = status;
+        this.creationTime = creationTime;
     }
 
-    public String getTagValue() {
-        return tagValue;
+    public String getStackName() {
+        return stackName;
     }
 
-    public void setTagValue(String tagValue) {
-        this.tagValue = tagValue;
+    public void setStackName(String stackName) {
+        this.stackName = stackName;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Long getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Long creationTime) {
+        this.creationTime = creationTime;
     }
 }
