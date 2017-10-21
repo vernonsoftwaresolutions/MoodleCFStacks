@@ -168,6 +168,6 @@ Outputs:
       Name: DeleteHandlerArn
 
   DeleteHandlerVersion:
-    Value: !GetAtt DeleteHandler.Version
+    Value: !GetAtt DeleteHandlerVersion.Version
     Export:
-      Name: DeleteHandler
+      Name: DeleteHandlerVersion
