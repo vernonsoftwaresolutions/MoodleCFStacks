@@ -54,23 +54,23 @@ echo "deploymentId ${deploymentId}"
 ##
 # Now read each lambda function and publish a new version
 ##
-while read name; do
-    echo "publishing version ${VERSION} to lambda function $name"
-    LAMBDAVERSION=`aws lambda publish-version --function-name ${name} \
-               --description ${VERSION} \
-               --query '{Version:Version}' \
-               --output text`
-    echo "Version ${LAMBDAVERSION} published"
-done < names
+#while read name; do
+#    echo "publishing version ${VERSION} to lambda function $name"
+#    LAMBDAVERSION=`aws lambda publish-version --function-name ${name} \
+#               --description ${VERSION} \
+#               --query '{Version:Version}' \
+#               --output text`
+#    echo "Version ${LAMBDAVERSION} published"
+#done < names
 
 HANDLER_1_NAME=`aws cloudformation describe-stacks --stack-name  "${API_NAME}" \
-  --query "Stacks[0].[Outputs[?ends_with(OutputValue, '"${HANDLER_1}"')]][0][*].{OutputValue:OutputValue}"`
+  --query "Stacks[0].[Outputs[?ends_with(OutputValue, '"${HANDLER_1}"')]][0][*].{OutputValue:OutputValue}" --output text`
 
 
 echo "retrieved lambda function ${HANDLER_1_NAME}"
 
 HANDLER_2_NAME=`aws cloudformation describe-stacks --stack-name  "${API_NAME}" \
-  --query "Stacks[0].[Outputs[?ends_with(OutputValue, '"${HANDLER_2}"')]][0][*].{OutputValue:OutputValue}"`
+  --query "Stacks[0].[Outputs[?ends_with(OutputValue, '"${HANDLER_2}"')]][0][*].{OutputValue:OutputValue}" --output text`
 
 echo "retrieved lambda function ${HANDLER_2_NAME}"
 
