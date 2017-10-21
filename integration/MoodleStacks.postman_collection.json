@@ -8,6 +8,7 @@
 		"a6850eda-7555-a114-9281-01908d533d7d",
 		"74306ecb-3b4c-cf9c-cd9e-e8fbeeb69459",
 		"13252c0a-e0a5-f107-75f1-969ea9234823",
+		"d32ce9a7-bf71-d42f-4c38-469bb2fa5541",
 		"11187313-b6a2-74cf-1451-b47d8d24d508",
 		"f343eb69-c9cd-03fb-076a-9a3a4436628e"
 	],
@@ -30,7 +31,7 @@
 			],
 			"url": "https://cfstack.vssdevelopment.com/dev/moodle/stacks/{{tobedeleted}}",
 			"queryParams": [],
-			"preRequestScript": "var randomClient = Math.random().toString(36).slice(2)\n\nvar randomPriority = Math.floor(Math.random() * 100) + 1  \n\npostman.setGlobalVariable(\"randomClient\",randomClient);\npostman.setGlobalVariable(\"randomPriority\",randomPriority);\n",
+			"preRequestScript": "",
 			"pathVariables": {},
 			"pathVariableData": [],
 			"method": "DELETE",
@@ -39,7 +40,7 @@
 			"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Access-Control-Allow-Origin is present\"] = postman.getResponseHeader(\"Access-Control-Allow-Origin\");\n",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1508609699098,
+			"time": 1508611593686,
 			"name": "Delete Stack",
 			"description": "initial test",
 			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
@@ -250,6 +251,35 @@
 			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
 			"responses": [],
 			"rawModeData": "{\n\t\"stackName\": \"moodle-ecs-single\",\n\t\"clientName\": \"{{randomClient}}\",\n\t\"vpcId\": \"vpc-c7aa77be\",\n\t\"hostedZoneName\": \"vssdevelopment.com\",\n\t\"priority\": \"{{randomPriority}}\"\n}"
+		},
+		{
+			"id": "d32ce9a7-bf71-d42f-4c38-469bb2fa5541",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "https://cfstack.vssdevelopment.com/dev/moodle/stacks/anystring",
+			"queryParams": [],
+			"preRequestScript": "\n",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "OPTIONS",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"Status code is 200\"] = responseCode.code === 200;\n",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1508611585206,
+			"name": "Delete Stack OPTIONS",
+			"description": "initial test",
+			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
+			"responses": [],
+			"rawModeData": ""
 		},
 		{
 			"id": "f343eb69-c9cd-03fb-076a-9a3a4436628e",
