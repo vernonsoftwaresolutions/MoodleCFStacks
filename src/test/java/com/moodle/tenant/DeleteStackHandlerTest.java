@@ -1,6 +1,7 @@
 package com.moodle.tenant;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.moodle.tenant.cloudformation.CloudformationClient;
 import com.moodle.tenant.factory.ProxyResponseFactory;
 import com.moodle.tenant.lambda.ProxyRequest;
 import com.moodle.tenant.lambda.ProxyResponse;
@@ -27,6 +28,8 @@ public class DeleteStackHandlerTest {
     @Mock
     private ProxyResponseFactory factory;
     @Mock
+    private CloudformationClient client;
+    @Mock
     private ProxyRequest proxyRequest;
     @Mock
     private Context context;
@@ -41,12 +44,12 @@ public class DeleteStackHandlerTest {
             put("Access-Control-Allow-Origin", "*");
         }};
         proxyResponse = new ProxyResponse();
-        handler = new DeleteStackHandler(factory);
+        handler = new DeleteStackHandler(factory,client);
 
     }
     @Test
     public void handleRequest() throws Exception {
-        given(proxyRequest.getQueryParam("stackname")).willReturn(Optional.of("stackname"));
+        given(proxyRequest.getPathParam("stackname")).willReturn(Optional.of("stackname"));
         given(factory.createResponse(anyObject(), eq(HttpStatus.SC_OK), eq(cors))).willReturn(proxyResponse);
 
         ProxyResponse response = handler.handleRequest(proxyRequest,context );
@@ -55,8 +58,18 @@ public class DeleteStackHandlerTest {
     }
     @Test
     public void handleRequestBadRequest() throws Exception {
-        given(proxyRequest.getQueryParam("stackname")).willReturn(Optional.empty());
+        given(proxyRequest.getPathParam("stackname")).willReturn(Optional.empty());
         given(factory.createErrorResponse(400, 400,"Bad request", cors)).willReturn(proxyResponse);
+
+        ProxyResponse response = handler.handleRequest(proxyRequest,context );
+        assertThat(response, is(proxyResponse));
+
+    }
+    @Test
+    public void handleRequestInternalServerError() throws Exception {
+        given(proxyRequest.getPathParam("stackname")).willReturn(Optional.of("stackname"));
+        given(client.deleteStack("stackname")).willThrow(new RuntimeException("ERROR"));
+        given(factory.createErrorResponse(500, 500,"Internal Server Error", cors)).willReturn(proxyResponse);
 
         ProxyResponse response = handler.handleRequest(proxyRequest,context );
         assertThat(response, is(proxyResponse));

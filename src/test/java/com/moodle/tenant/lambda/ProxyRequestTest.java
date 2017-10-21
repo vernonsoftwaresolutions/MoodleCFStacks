@@ -37,4 +37,22 @@ public class ProxyRequestTest {
 
         assertThat(value.isPresent(), is(false));
     }
+    @Test
+    public void getPathParam() throws Exception {
+        proxyRequest.setPathParameters(new HashMap<String, String>(){{
+            put("KEY", "VALUE");
+        }});
+
+        Optional<String> value = proxyRequest.getPathParam("KEY");
+
+        assertThat(value.get(), is("VALUE"));
+    }
+    @Test
+    public void getPathParamEmpty() throws Exception {
+        proxyRequest.setPathParameters(new HashMap<String, String>());
+
+        Optional<String> value = proxyRequest.getPathParam("KEY");
+
+        assertThat(value.isPresent(), is(false));
+    }
 }

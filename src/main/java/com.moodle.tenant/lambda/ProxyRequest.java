@@ -51,6 +51,13 @@ public class ProxyRequest {
         return Optional.empty();
     }
 
+    public Optional<String> getPathParam(String key){
+        if (pathParameters.containsKey(key)){
+            return Optional.of(pathParameters.get(key));
+        }
+        return Optional.empty();
+    }
+
     @Override
     public String toString() {
         return "ProxyRequest{" +
