@@ -22,7 +22,7 @@ deployment:
     branch: master
     commands:
     ## create deployment
-    - sh ./deploy.sh lambda.bucket.moodle $CIRCLE_BUILD_NUM dev cfstack.vssdevelopment.com vssdevelopment.com.
+    - sh ./deploy.sh lambda.bucket.moodle $CIRCLE_BUILD_NUM dev cfstack.vssdevelopment.com vssdevelopment.com. GetHandler DeleteHandler
     - sh ./run_postman_tests.sh
     # todo- refactor deploy.sh to probably a couple different scripts?  For instance we don't need to
     # todo- publish a new version nor do we really need to deploy a new version of assets (although not as big of a deal)
