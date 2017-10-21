@@ -7,7 +7,9 @@
 		"75d340d1-c94b-9933-8eed-b76af8fadf3b",
 		"a6850eda-7555-a114-9281-01908d533d7d",
 		"74306ecb-3b4c-cf9c-cd9e-e8fbeeb69459",
-		"11187313-b6a2-74cf-1451-b47d8d24d508"
+		"13252c0a-e0a5-f107-75f1-969ea9234823",
+		"11187313-b6a2-74cf-1451-b47d8d24d508",
+		"f343eb69-c9cd-03fb-076a-9a3a4436628e"
 	],
 	"folders": [],
 	"folders_order": [],
@@ -26,7 +28,7 @@
 					"enabled": true
 				}
 			],
-			"url": "https://cfstack.vssdevelopment.com/dev/moodle/stacks/{{tobedelete}}",
+			"url": "https://cfstack.vssdevelopment.com/dev/moodle/stacks/{{tobedeleted}}",
 			"queryParams": [],
 			"preRequestScript": "var randomClient = Math.random().toString(36).slice(2)\n\nvar randomPriority = Math.floor(Math.random() * 100) + 1  \n\npostman.setGlobalVariable(\"randomClient\",randomClient);\npostman.setGlobalVariable(\"randomPriority\",randomPriority);\n",
 			"pathVariables": {},
@@ -37,12 +39,56 @@
 			"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Access-Control-Allow-Origin is present\"] = postman.getResponseHeader(\"Access-Control-Allow-Origin\");\n",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1508553829472,
+			"time": 1508609699098,
 			"name": "Delete Stack",
 			"description": "initial test",
 			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
 			"responses": [],
 			"rawModeData": ""
+		},
+		{
+			"id": "13252c0a-e0a5-f107-75f1-969ea9234823",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "https://cfstack.vssdevelopment.com/dev/moodle/stacks?tagKey=TYPE&tagValue=TENANT",
+			"queryParams": [
+				{
+					"key": "tagKey",
+					"value": "TYPE",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "tagValue",
+					"value": "TENANT",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"preRequestScript": "var randomClient = Math.random().toString(36).slice(2)\n\nvar randomPriority = Math.floor(Math.random() * 100) + 1  \n\npostman.setGlobalVariable(\"randomClient\",randomClient);\npostman.setGlobalVariable(\"randomPriority\",randomPriority);\n",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Stacks exist\"] = jsonData.length > 0\ntests[\"stackName exists\"] = jsonData[0].stackName !== null && jsonData[0].stackName !== undefined\ntests[\"url exists\"] = jsonData[0].url !== null && jsonData[0].url !== undefined\ntests[\"creationTime exists\"] = jsonData[0].creationTime !== null && jsonData[0].creationTime !== undefined\nvar stackToDelete = jsonData.filter(function(stack){\n    return stack.stackName === globals.tobedeleted\n})\ntests[\"Stacks exist\"] = stackToDelete.length > 0\ntests[\"stackName is correct\"] = stackToDelete[0].stackName === globals.tobedeleted\ntests[\"url exists\"] = stackToDelete[0].url !== null && stackToDelete[0].url !== undefined\ntests[\"creationTime exists\"] = stackToDelete[0].creationTime !== null && stackToDelete[0].creationTime !== undefined\n\n\ntests[\"Access-Control-Allow-Origin is present\"] = postman.getResponseHeader(\"Access-Control-Allow-Origin\");",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1508609625357,
+			"name": "Make sure the client exists",
+			"description": "initial test",
+			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
+			"responses": [],
+			"rawModeData": "{\n\t\"stackName\": \"moodle-ecs-single\",\n\t\"clientName\": \"{{randomClient}}\",\n\t\"vpcId\": \"vpc-c7aa77be\",\n\t\"hostedZoneName\": \"vssdevelopment.com\",\n\t\"priority\": \"{{randomPriority}}\"\n}"
 		},
 		{
 			"id": "74306ecb-3b4c-cf9c-cd9e-e8fbeeb69459",
@@ -57,23 +103,21 @@
 			],
 			"url": "https://api.vssdevelopment.com/dev/moodle/tenants",
 			"queryParams": [],
-			"preRequestScript": "var randomClient = Math.random().toString(36).slice(2)\n\nvar randomPriority = Math.floor(Math.random() * 100) + 1  \n\npostman.setGlobalVariable(\"randomClient\",randomClient);\npostman.setGlobalVariable(\"randomPriority\",randomPriority);\npostman.setGlobalVariable(\"tobedelete\",\"tobedelete\");\n",
+			"preRequestScript": "var randomClient = Math.random().toString(36).slice(2)\n\nvar randomPriority = Math.floor(Math.random() * 100) + 1  \n\npostman.setGlobalVariable(\"randomClient\",randomClient);\npostman.setGlobalVariable(\"randomPriority\",randomPriority);\npostman.setGlobalVariable(\"tobedeleted\",\"tobedeleted\");\n",
 			"pathVariables": {},
 			"pathVariableData": [],
 			"method": "POST",
 			"data": [],
 			"dataMode": "raw",
-			"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"Status code is 202\"] = responseCode.code === 202;\ntests[\"messageId exists exists\"] = jsonData.value !== null && jsonData.messageId !== undefined\n\ntests[\"Access-Control-Allow-Origin is present\"] = postman.getResponseHeader(\"Access-Control-Allow-Origin\");\n//wait 20 seconds for the creation to start\nsetTimeout(function(){}, 20000);",
+			"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"Status code is 202\"] = responseCode.code === 202;\ntests[\"messageId exists exists\"] = jsonData.value !== null && jsonData.messageId !== undefined\n\ntests[\"Access-Control-Allow-Origin is present\"] = postman.getResponseHeader(\"Access-Control-Allow-Origin\");\n//wait 20 seconds for the creation to start\nsetTimeout(function(){}, 10000);",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1508548318013,
+			"time": 1508609177794,
 			"name": "POST Client",
 			"description": "initial test",
 			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
 			"responses": [],
-			"isFromCollection": true,
-			"collectionRequestId": "b23e81b1-493d-5a01-3894-812be8a3de7e",
-			"rawModeData": "{\n\t\"stackName\": \"moodle-ecs-single\",\n\t\"clientName\": \"CoolCo{{randomClient}}\",\n\t\"vpcId\": \"vpc-c7aa77be\",\n\t\"hostedZoneName\": \"vssdevelopment.com\",\n\t\"priority\": \"{{randomPriority}}\"\n}"
+			"rawModeData": "{\n\t\"stackName\": \"moodle-ecs-single\",\n\t\"clientName\": \"{{tobedeleted}}\",\n\t\"vpcId\": \"vpc-c7aa77be\",\n\t\"hostedZoneName\": \"vssdevelopment.com\",\n\t\"priority\": \"{{randomPriority}}\"\n}"
 		},
 		{
 			"id": "75d340d1-c94b-9933-8eed-b76af8fadf3b",
@@ -202,6 +246,50 @@
 			"helperAttributes": {},
 			"time": 1505098490672,
 			"name": "cold start",
+			"description": "initial test",
+			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
+			"responses": [],
+			"rawModeData": "{\n\t\"stackName\": \"moodle-ecs-single\",\n\t\"clientName\": \"{{randomClient}}\",\n\t\"vpcId\": \"vpc-c7aa77be\",\n\t\"hostedZoneName\": \"vssdevelopment.com\",\n\t\"priority\": \"{{randomPriority}}\"\n}"
+		},
+		{
+			"id": "f343eb69-c9cd-03fb-076a-9a3a4436628e",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "https://cfstack.vssdevelopment.com/dev/moodle/stacks?tagKey=TYPE&tagValue=TENANT",
+			"queryParams": [
+				{
+					"key": "tagKey",
+					"value": "TYPE",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "tagValue",
+					"value": "TENANT",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"preRequestScript": "var randomClient = Math.random().toString(36).slice(2)\n\nvar randomPriority = Math.floor(Math.random() * 100) + 1  \n\npostman.setGlobalVariable(\"randomClient\",randomClient);\npostman.setGlobalVariable(\"randomPriority\",randomPriority);\n",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Stacks exist\"] = jsonData.length > 0\ntests[\"stackName exists\"] = jsonData[0].stackName !== null && jsonData[0].stackName !== undefined\ntests[\"url exists\"] = jsonData[0].url !== null && jsonData[0].url !== undefined\ntests[\"creationTime exists\"] = jsonData[0].creationTime !== null && jsonData[0].creationTime !== undefined\n\nvar stackToDelete = jsonData.filter(function(stack){\n    return stack.stackName === globals.tobedeleted\n    \n})\ntests[\"Stacks exist\"] = stackToDelete.length > 0\ntests[\"stackName is correct\"] = stackToDelete[0].stackName === globals.tobedeleted\ntests[\"url exists\"] = stackToDelete[0].url !== null && stackToDelete[0].url !== undefined\ntests[\"Status is DELETE_IN_PROGRESS\"] = stackToDelete[0].status === \"DELETE_IN_PROGRESS\"\n\n\ntests[\"Access-Control-Allow-Origin is present\"] = postman.getResponseHeader(\"Access-Control-Allow-Origin\");",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1508609697282,
+			"name": "Make sure the client is now being delted",
 			"description": "initial test",
 			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
 			"responses": [],
