@@ -54,10 +54,11 @@ echo "retrieved lambda functions, now publish versions"
 ##
 while read name; do
     echo "publishing version ${VERSION} to lambda function $name"
-               --function-name ${name} \
+    LAMBDAVERSION=`aws lambda publish-version --function-name ${name} \
                --description ${VERSION} \
                --query '{Version:Version}' \
-               --output text
+               --output text`
+    echo "Version ${LAMBDAVERSION} published"
 done < names
 
 ##
@@ -83,12 +84,12 @@ aws cloudformation package --template-file \
 ##
 # Deploy template
 ##
-echo "about to deploy environment with variables ${apiGatewayApiRef} ${ENV} ${deploymentId} ${LAMBDAVERSION} ${DNSNAME}"
+echo "about to deploy environment with variables ${apiGatewayApiRef} ${ENV} ${deploymentId} ${VERSION} ${DNSNAME}"
 
 aws cloudformation deploy --template-file \
     formation_env_output.yaml --capabilities CAPABILITY_IAM \
     --stack-name "${API_NAME}-${ENV}" \
     --parameter-overrides ApiGateway="${apiGatewayApiRef}" \
-    StageName="${ENV}" DeploymentId="${deploymentId}" DomainName="${DNSNAME}" Version="${LAMBDAVERSION}" DomainName="${DNSNAME}"|| exit 0
+    StageName="${ENV}" DeploymentId="${deploymentId}" DomainName="${DNSNAME}" Version="${VERSION}" DomainName="${DNSNAME}"|| exit 0
 
 
