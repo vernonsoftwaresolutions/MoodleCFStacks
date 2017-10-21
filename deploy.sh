@@ -42,17 +42,36 @@ deploymentId=`aws apigateway get-stages \
 echo "deploymentId ${deploymentId}"
 
 ##
+# Get the lambda function names and store them as a file
+##
+aws cloudformation describe-stacks --stack-name "${API_NAME}" \
+    --query "Stacks[0].[Outputs[?starts_with(OutputValue, 'arn:aws:lambda')]][0][*].{OutputValue:OutputValue}" \
+    --output text > names
+
+echo "retrieved lambda functions, now publish versions"
+##
+# Now read each lambda function and publish a new version
+##
+while read name; do
+    echo "publishing version ${VERSION} to lambda function $name"
+               --function-name ${name} \
+               --description ${VERSION} \
+               --query '{Version:Version}' \
+               --output text
+done < names
+
+##
 # Publish new lambda version
 ##
-LAMBDANAME=`aws cloudformation describe-stacks \
-            --stack-name "${API_NAME}"  \
-            --query "Stacks[0].[Outputs[?starts_with(OutputValue, 'arn:aws:lambda')]][0][*].{OutputValue:OutputValue}" --output=text`
+#LAMBDANAME=`aws cloudformation describe-stacks \
+#            --stack-name "${API_NAME}"  \
+#            --query "Stacks[0].[Outputs[?starts_with(OutputValue, 'arn:aws:lambda')]][0][*].{OutputValue:OutputValue}" --output=text`
 
-echo "retrieved lambda name ${LAMBDANAME}"
-LAMBDAVERSION=`aws lambda publish-version \
-                --function-name "${LAMBDANAME}" \
-                --description "${VERSION}" \
-                --query '{Version:Version}' --output=text`
+#echo "retrieved lambda name ${LAMBDANAME}"
+#LAMBDAVERSION=`aws lambda publish-version \
+#                --function-name "${LAMBDANAME}" \
+#                --description "${VERSION}" \
+#                --query '{Version:Version}' --output=text`
 
 ##
 # Package the environment template
