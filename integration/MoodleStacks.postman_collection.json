@@ -5,7 +5,8 @@
 	"order": [
 		"b2f4602f-85a0-e879-7221-094a7962f7e1",
 		"75d340d1-c94b-9933-8eed-b76af8fadf3b",
-		"a6850eda-7555-a114-9281-01908d533d7d"
+		"a6850eda-7555-a114-9281-01908d533d7d",
+		"11187313-b6a2-74cf-1451-b47d8d24d508"
 	],
 	"folders": [],
 	"folders_order": [],
@@ -13,6 +14,35 @@
 	"owner": "837563",
 	"public": false,
 	"requests": [
+		{
+			"id": "11187313-b6a2-74cf-1451-b47d8d24d508",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "https://cfstack.vssdevelopment.com/dev/moodle/stacks/{{tobedelete}}",
+			"queryParams": [],
+			"preRequestScript": "var randomClient = Math.random().toString(36).slice(2)\n\nvar randomPriority = Math.floor(Math.random() * 100) + 1  \n\npostman.setGlobalVariable(\"randomClient\",randomClient);\npostman.setGlobalVariable(\"randomPriority\",randomPriority);\n",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "DELETE",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Access-Control-Allow-Origin is present\"] = postman.getResponseHeader(\"Access-Control-Allow-Origin\");\n",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1508548350642,
+			"name": "Delete Stack",
+			"description": "initial test",
+			"collectionId": "d3480681-c1aa-cf48-7bb3-946c56e010d8",
+			"responses": [],
+			"rawModeData": "{\n\t\"stackName\": \"moodle-ecs-single\",\n\t\"clientName\": \"{{randomClient}}\",\n\t\"vpcId\": \"vpc-c7aa77be\",\n\t\"hostedZoneName\": \"vssdevelopment.com\",\n\t\"priority\": \"{{randomPriority}}\"\n}"
+		},
 		{
 			"id": "75d340d1-c94b-9933-8eed-b76af8fadf3b",
 			"headers": "Content-Type: application/json\n",

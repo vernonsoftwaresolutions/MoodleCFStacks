@@ -58,6 +58,13 @@ Resources:
                 type: aws_proxy
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetHandler.Arn}:${!stageVariables.env}/invocations
               responses: {}
+          "/moodle/stacks/{stackname}":
+            delete:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteHandler.Arn}:${!stageVariables.env}/invocations
+              responses: {}
   #todo- this needs to be cleaned up to "least priviledge"
   LambdaRole:
     Type: AWS::IAM::Role
@@ -102,15 +109,41 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref APIGateway
-            Path: /moodle/tenants
-            Method: post
-
+            Path: /moodle/stacks
+            Method: get
+  DeleteHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.moodle.tenant.DeleteStackHandler
+      FunctionName: DeleteHandler
+      MemorySize: 512
+      Runtime: java8
+      CodeUri: build/distributions/MoodleTenantlambda.zip
+      Timeout: 15
+      Environment:
+        Variables:
+          DUMMY: Value
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        PostResource:
+          Type: Api
+          Properties:
+            RestApiId: !Ref APIGateway
+            Path: /moodle/stacks/{stackname}
+            Method: delete
   HandlerVersion:
     Type: AWS::Lambda::Version
     Properties:
       FunctionName:
         Ref: GetHandler
       Description: Most recent published version
+
+  DeleteHandlerVersion:
+    Type: AWS::Lambda::Version
+    Properties:
+      FunctionName:
+        Ref: DeleteHandler
+      Description: Most recent published version of DeleteHandler
 
 Outputs:
   Certificate:
@@ -128,3 +161,13 @@ Outputs:
     Value: !GetAtt HandlerVersion.Version
     Export:
       Name: HandlerVersion
+
+  DeleteHandlerArn:
+    Value: !GetAtt DeleteHandler.Arn
+    Export:
+      Name: DeleteHandlerArn
+
+  DeleteHandlerVersion:
+    Value: !GetAtt DeleteHandler.Version
+    Export:
+      Name: DeleteHandler

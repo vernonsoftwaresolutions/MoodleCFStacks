@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moodle.tenant.cloudformation.CloudformationClient;
 import com.moodle.tenant.cloudformation.CloudformationClientImpl;
 import com.moodle.tenant.factory.ProxyResponseFactory;
+import com.moodle.tenant.lambda.LambdaHelper;
 import com.moodle.tenant.lambda.ProxyRequest;
 import com.moodle.tenant.lambda.ProxyResponse;
 import com.moodle.tenant.model.CFStack;
@@ -69,7 +70,7 @@ public class GetStacksHandler implements RequestHandler<ProxyRequest, ProxyRespo
                 return new CFStack(stack.getStackName(), url, stack.getStackStatus(), stack.getCreationTime().getTime());
             }).collect(Collectors.toList());
 
-            ProxyResponse proxyResponse = factory.createResponse(response, HttpStatus.SC_OK, getCorsHeaders());
+            ProxyResponse proxyResponse = factory.createResponse(response, HttpStatus.SC_OK, LambdaHelper.getCorsHeaders());
 
             log.info("About to return proxy response  " + proxyResponse);
 
@@ -77,19 +78,10 @@ public class GetStacksHandler implements RequestHandler<ProxyRequest, ProxyRespo
         }
         else {
             log.info("Received bad request");
-            return factory.createErrorResponse(400, 400, "Bad request", getCorsHeaders());
+            return factory.createErrorResponse(400, 400, "Bad request", LambdaHelper.getCorsHeaders());
         }
     }
 
-    /**
-     * Helper method to create cors headers for Browsers
-     * @return
-     */
-    private Map<String, String> getCorsHeaders(){
-        Map headers = new HashMap<String, String>();
-        headers.put( "Access-Control-Allow-Origin", "*");
-        return headers;
-    }
 
 
 

@@ -64,3 +64,23 @@ Resources:
       Principal: apigateway.amazonaws.com
       FunctionName: !Join [":", [ !ImportValue GetHandlerArn, !Ref StageName]]
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/${StageName}/*
+
+
+  # Delete Moodle Tenant alias
+  DeleteLambdaFunctionAlias:
+    Type: AWS::Lambda::Alias
+    Properties:
+      FunctionName: !ImportValue DeleteHandlerArn
+      FunctionVersion: !Ref Version
+      Name: !Ref StageName
+
+  ## Invoke Permissions
+  DeleteLambdaFunctionInvokePermission:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - DeleteLambdaFunctionAlias
+    Properties:
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      FunctionName: !Join [":", [ !ImportValue DeleteHandlerArn, !Ref StageName]]
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/${StageName}/*
